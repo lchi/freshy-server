@@ -7,9 +7,15 @@ For now we're just letting you know when a file is added/modified/deleted.
 
 Installation
 ------------
-You'll need the watchdog lib, which if you have ```pip``` installed is as easy as:
+You'll need the watchdog, twisted and autobahn python libraries, which if you have ```pip``` installed is as easy as:
 
      $ pip install watchdog
+     $ pip install autobahn
+     $ pip install twisted
+
+I'm using Linux Mint 12, and pip didn't work for twisted.  You can also try:
+
+    $ sudo apt-get install python-twisted
 
 Credit
 ------

@@ -5,10 +5,17 @@ import time
 
 from watchdog.observers import Observer
 from watchdog.events import LoggingEventHandler
+from twisted.internet import reactor
+from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol, listenWS
 
 from MessangerEventHandler import MessangerEventHandler
 from DummyListener import DummyListener
 
+class EchoServerProtocol(WebSocketServerProtocol):
+ 
+   def onMessage(self, msg, binary):
+      self.sendMessage(msg, binary)
+ 
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print 'Usage: python freshy-server.py <dirs>'
@@ -30,7 +37,12 @@ if __name__ == '__main__':
         observer.schedule(event_handler, path=dir_path, recursive=True)
         observer.start()
         observers.append(observer)
-    
+
+    factory = WebSocketServerFactory("ws://localhost:1658")
+    factory.protocol = EchoServerProtocol
+    listenWS(factory)
+    reactor.run()
+    print 'asdkjskfjaf'
     try:
         while True:
             time.sleep(1)
@@ -39,8 +51,5 @@ if __name__ == '__main__':
             obs.stop()
         print '\nbye'
         sys.exit(1)
+    
 
-            
-        
-
-        

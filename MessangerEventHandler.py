@@ -13,20 +13,16 @@ class MessangerEventHandler(watchdog.events.FileSystemEventHandler):
     
     def on_any_event(self, event):
         print event.src_path, event.event_type
-        self._notify_listener(event)
+        self._notify_listener(self._jsonize_event(event))
+
+    def _notify_listener(self, msg):
+        self.listener.receive(msg)
         
-    def _notify_listener(self, event):
+    def _jsonize_event(self, event):
         rel_path = string.replace(event.src_path, self.base_dir, '')
-        msg = json.dumps(
+        return json.dumps(
             {'event':event.event_type,
              'obj':rel_path,
              'time':str(datetime.utcnow()) + ' UTC'})
         
-        self.listener.receive(msg)
 
-class JSONRefreshMessage(object):
-    
-    def __init__(self, action, path, time):
-        self.action = action
-        self.path = path
-        self.time = time
