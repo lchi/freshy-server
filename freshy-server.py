@@ -25,7 +25,7 @@ if __name__ == '__main__':
             print dir_path, 'is not a directory.'
             sys.exit(1)
     
-        event_handler = MessangerEventHandler(DummyListener())
+        event_handler = MessangerEventHandler(DummyListener(), os.getcwd())
         observer = Observer()
         observer.schedule(event_handler, path=dir_path, recursive=True)
         observer.start()

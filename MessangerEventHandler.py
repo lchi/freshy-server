@@ -1,10 +1,14 @@
-import watchdog
 from datetime import datetime
+import json
+import string
+
+import watchdog
 
 class MessangerEventHandler(watchdog.events.FileSystemEventHandler):
     
-    def __init__(self, listener):
+    def __init__(self, listener, base_dir):
         self.listener = listener
+        self.base_dir = base_dir
         super(watchdog.events.FileSystemEventHandler, self).__init__()
     
     def on_any_event(self, event):
@@ -12,7 +16,17 @@ class MessangerEventHandler(watchdog.events.FileSystemEventHandler):
         self._notify_listener(event)
         
     def _notify_listener(self, event):
-        msg = event.src_path + event.event_type \
-            + str(datetime.utcnow()) + ' UTC' # change to json format 
+        rel_path = string.replace(event.src_path, self.base_dir, '')
+        msg = json.dumps(
+            {'event':event.event_type,
+             'obj':rel_path,
+             'time':str(datetime.utcnow()) + ' UTC'})
+        
         self.listener.receive(msg)
+
+class JSONRefreshMessage(object):
     
+    def __init__(self, action, path, time):
+        self.action = action
+        self.path = path
+        self.time = time
