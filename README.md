@@ -1,0 +1,3 @@
+Work in progress....
+
+For now we're just letting you know when a file is added/modified/deleted.
