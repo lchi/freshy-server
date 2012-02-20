@@ -1,9 +1,9 @@
 freshy-server
 =============
 
-Work in progress....
+Keeping your web content fresh!
 
-For now we're just letting you know when a file is added/modified/deleted.
+Work in progress....
 
 Installation
 ------------
@@ -13,7 +13,7 @@ You'll need the watchdog, twisted and autobahn python libraries, which if you ha
      $ pip install autobahn
      $ pip install twisted
 
-I'm using Linux Mint 12, and pip didn't work for twisted.  You can also try:
+I'm using Linux Mint 12, and pip didn't work for twisted on my machine.  You can also try:
 
     $ sudo apt-get install python-twisted
 
