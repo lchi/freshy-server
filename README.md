@@ -7,7 +7,8 @@ For now we're just letting you know when a file is added/modified/deleted.
 
 Installation
 ------------
-need to install watchdog
+You'll need the watchdog lib, which if you have ```pip``` installed is as easy as:
+
      $ pip install watchdog
 
 Credit
