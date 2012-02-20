@@ -10,6 +10,10 @@ Installation
 need to install watchdog
      $ pip install watchdog
 
+Credit
+------
+Idea for this project was taken from Slushbox, a project by John J. Workman.  See the project at https://github.com/workmajj/slushbox
+
 License
 -------
 Copyright (c) 2012 Lucas Chi
