@@ -1,3 +1,9 @@
+'''
+Parts of this code is reused from the samples at 
+http://www.tavendo.de/autobahn/tutorial/broadcast.html
+and is Copyright 2011 Tavendo GmbH
+'''
+
 import logging
 import sys
 import os
@@ -11,10 +17,44 @@ from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol, 
 from MessangerEventHandler import MessangerEventHandler
 from DummyListener import DummyListener
 
-class EchoServerProtocol(WebSocketServerProtocol):
- 
-   def onMessage(self, msg, binary):
-      self.sendMessage(msg, binary)
+class FreshyServerProtocol(WebSocketServerProtocol):
+    def connectionMade(self):
+        WebSocketServerProtocol.connectionMade(self)
+        self.factory.register(self)
+        self.sendMessage("Connection established")
+
+    def sendFSEvent(self, json):
+        print 'to', self.peerstr
+        self.sendMessage(json)
+
+    def connectionLost(self, reason):
+        WebSocketServerProtocol.connectionLost(self, reason)
+        self.factory.unregister(self)
+
+class FreshyServerFactory(WebSocketServerFactory):
+    protocol = FreshyServerProtocol
+
+    def __init__(self, url='ws://localhost', port=4444):
+        addr = url + ':' + str(port)
+        print 'listening on', addr
+        WebSocketServerFactory.__init__(self, addr)
+        self.clients = []
+
+    def register(self, client):
+        if not client in self.clients:
+            print 'registered client', client.peerstr
+            self.clients.append(client)
+
+    def unregister(self, client):
+        if client in self.clients:
+            print 'unregistered client', client.peerstr
+            self.clients.remove(client)
+
+    # broadcasts a json msg to all clients
+    def notify_clients(self, message):
+        print 'broadcasting ', message
+        for c in self.clients:
+            c.sendFSEvent(message)
  
 if __name__ == '__main__':
     if len(sys.argv) < 2:
@@ -22,6 +62,10 @@ if __name__ == '__main__':
         sys.exit(1)
 
     observers = []
+
+    ffactory = FreshyServerFactory("ws://localhost", 4444)
+    ffactory.protocol = FreshyServerProtocol
+    listenWS(ffactory)
 
     for arg in sys.argv[1:]:
         dir_path = os.path.abspath(arg)
@@ -32,23 +76,18 @@ if __name__ == '__main__':
             print dir_path, 'is not a directory.'
             sys.exit(1)
     
-        event_handler = MessangerEventHandler(DummyListener(), os.getcwd())
+        event_handler = MessangerEventHandler(ffactory, os.getcwd())
         observer = Observer()
         observer.schedule(event_handler, path=dir_path, recursive=True)
         observer.start()
         observers.append(observer)
 
-    factory = WebSocketServerFactory("ws://localhost:1658")
-    factory.protocol = EchoServerProtocol
-    listenWS(factory)
-    reactor.run()
-    print 'asdkjskfjaf'
     try:
-        while True:
-            time.sleep(1)
+        reactor.run()
     except KeyboardInterrupt:
         for obs in observers:
             obs.stop()
+        reactor.stop()
         print '\nbye'
         sys.exit(1)
     
