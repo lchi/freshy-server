@@ -49,6 +49,13 @@ class FreshyServerFactory(WebSocketServerFactory):
         if client in self.clients:
             print 'unregistered client', client.peerstr
             self.clients.remove(client)
+        self._printConnected()
+
+    def _printConnected(self):
+        print 'connected clients:[',
+        for client in self.clients:
+            print client.peerstr + ',',
+        print ']'
 
     # broadcasts a json msg to all clients
     def notify_clients(self, message):
