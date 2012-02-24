@@ -12,24 +12,33 @@ import time
 from watchdog.observers import Observer
 from watchdog.events import LoggingEventHandler
 from twisted.internet import reactor
-from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol, listenWS
+from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol, listenWS, WebSocketProtocol, ConnectionRequest
 
 from MessangerEventHandler import MessangerEventHandler
-from DummyListener import DummyListener
+
+from twisted.python import log
 
 class FreshyServerProtocol(WebSocketServerProtocol):
     def connectionMade(self):
+        print 'connection made'
         WebSocketServerProtocol.connectionMade(self)
+
+    def onOpen(self):
+        WebSocketServerProtocol.onOpen(self)
         self.factory.register(self)
-        self.sendMessage("Connection established")
-
+        print 'Connection opened to', self.peerstr
+        WebSocketProtocol.sendMessage(self, "Connection established")
+    
     def sendFSEvent(self, json):
+        WebSocketProtocol.sendMessage(self, json)
         print 'to', self.peerstr
-        self.sendMessage(json)
 
-    def connectionLost(self, reason):
-        WebSocketServerProtocol.connectionLost(self, reason)
+    def onClose(self, wasClean, code, reason):
+        print 'closed', self.peerstr
+        WebSocketServerProtocol.onClose(self, wasClean,
+                                        code, reason)
         self.factory.unregister(self)
+
 
 class FreshyServerFactory(WebSocketServerFactory):
     protocol = FreshyServerProtocol
@@ -70,10 +79,11 @@ if __name__ == '__main__':
 
     observers = []
 
+    log.startLogging(sys.stdout)
     ffactory = FreshyServerFactory("ws://localhost", 4444)
     ffactory.protocol = FreshyServerProtocol
     listenWS(ffactory)
-
+    
     for arg in sys.argv[1:]:
         dir_path = os.path.abspath(arg)
         if not os.path.exists(dir_path):
@@ -83,12 +93,12 @@ if __name__ == '__main__':
             print dir_path, 'is not a directory.'
             sys.exit(1)
     
-        event_handler = MessangerEventHandler(ffactory, os.getcwd())
+        event_handler = MessangerEventHandler(ffactory, reactor, os.getcwd())
         observer = Observer()
         observer.schedule(event_handler, path=dir_path, recursive=True)
         observer.start()
         observers.append(observer)
-
+        
     try:
         reactor.run()
     except KeyboardInterrupt:
