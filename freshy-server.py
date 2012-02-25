@@ -27,7 +27,6 @@ class FreshyServerProtocol(WebSocketServerProtocol):
         WebSocketServerProtocol.onOpen(self)
         self.factory.register(self)
         print 'Connection opened to', self.peerstr
-        WebSocketProtocol.sendMessage(self, "Connection established")
     
     def sendFSEvent(self, json):
         WebSocketProtocol.sendMessage(self, json)
