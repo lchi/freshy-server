@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name = 'freshy-server',
     packages = ['freshy-server'],
-    version = '0.2.1',
+    version = '0.2',
     description = 'Page refresh tool for web developers.',
     author = 'Lucas Chi',
     author_email = 'chi.lucas@gmail.com',

@@ -9,7 +9,7 @@ You'll need to use [freshy-chrome-extension](https://github.com/lchi/freshy-chro
 
 What does this do?
 ------------------
-This tool watches for filesystem changes and broadcasts a message to connected clients any time a directory being 'watched' registers an event (creation, modification, deletion).  The intended client for this tool is the [freshy-chrome-extension](https://github.com/lchi/freshy-chrome-extension), but you're free to write your if you wish (API coming soon, though the code is fairly short).  Currently, the client refreshes the page you're viewing whenever a filesystem event is registered.  This is useful when you're working on a web app and don't want to keep pressing ctrl-r.
+This tool watches for filesystem changes and broadcasts a message to connected clients any time a directory being 'watched' registers an event (creation, modification, deletion).  The intended client for this tool is the [freshy-chrome-extension](https://github.com/lchi/freshy-chrome-extension), but you're free to write your own if you wish (API coming soon, though the code is fairly short).  Currently, the client refreshes the page you're viewing whenever a filesystem event is registered.  This is useful when you're working on a web app and don't want to keep pressing ctrl-r.
 
 TLDR; Point this at a directory and open a page using the extension and the page will be refreshed everytime you change something in the directory.
 
