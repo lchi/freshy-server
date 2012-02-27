@@ -15,7 +15,11 @@ TLDR; Point this at a directory and open a page using the extension and the page
 
 Installation
 ------------
-First clone this repository:
+If you have ```pip``` you can simply use 
+
+       $ pip install freshy-server
+
+Otherwise, first clone this repository:
 
       $ git clone git@github.com:/lchi/freshy-server
 
