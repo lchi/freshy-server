@@ -37,9 +37,19 @@ Usage
 -----
 For now, the server always binds to port 4444.  This will be changed in the future so you can specify where you want to listen.  To run, use:
 
-    $python freshy-server.py <directories>
+    	 $ python freshy-server.py <directories>
 
-Where <directories> specify one or more directories to be watched for filesystem changes.  Separate these with spaces.
+Where <directories> specify one or more directories to be watched for filesystem changes.  Separate these with spaces.  Once the server has been started, you can point your browser to a page running locally using the Google Chrome extension, and this will reload the page when there are changes to a file in the specified directories.
+
+Example:
+
+	$ python freshy-server.py myWebAppRoot/  # starts the server, and watches myWebAppRoot and subdirectories for changes
+
+	1.  Go to your Google Chrome window (with the extension installed).
+	2.  Type the following in the omnibox with <tab> being a tab press: freshy <tab> localhost 
+	3.  Watch as the page reloads automatically when the underlying files are changed!
+
+Note that the server doesn't know that the files your watching and the files you're viewing in your browser are related.  It just knows where to look for changes, and who is connected.  
 
 Ctrl-C to quit.
 
