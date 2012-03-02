@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 '''
 Parts of this code is reused from the samples at 
 http://www.tavendo.de/autobahn/tutorial/broadcast.html

@@ -1,0 +1,5 @@
+#!/usr/bin/env sh
+
+python -m freshy-server.freshy-server $@
+
+exit 0

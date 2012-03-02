@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name = 'freshy-server',
     packages = ['freshy-server'],
-    version = '0.2',
+    version = '0.2.2',
     description = 'Page refresh tool for web developers.',
     author = 'Lucas Chi',
     author_email = 'chi.lucas@gmail.com',
@@ -24,6 +24,7 @@ setup(
         'autobahn',
         'watchdog',
         ],
+    scripts=['bin/freshy-server'],
     long_description = """\
 Please see https://github.com/lchi/freshy-server, or the README for more information.
 """,
