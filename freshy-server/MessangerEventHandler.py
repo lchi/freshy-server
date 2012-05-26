@@ -20,6 +20,8 @@ class MessangerEventHandler(watchdog.events.FileSystemEventHandler):
     def _jsonize_event(self, event):
         rel_path = string.replace(event.src_path, self.base_dir, '')
         return json.dumps(
-            {'event':event.event_type,
-             'obj':rel_path,
-             'time':str(datetime.utcnow()) + ' UTC'})
+            {
+                'event':event.event_type,
+                'obj':rel_path,
+                'time':str(datetime.utcnow()) + ' UTC'
+            })
