@@ -69,7 +69,7 @@ class FreshyServerFactory(WebSocketServerFactory):
         print 'broadcasting ', message
         for c in self.clients:
             c.sendFSEvent(message)
- 
+
 if __name__ == '__main__':
     if len(sys.argv) < 2:
         print 'Usage: python freshy-server.py <dirs>'
