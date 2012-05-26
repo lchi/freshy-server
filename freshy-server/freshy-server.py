@@ -1,20 +1,17 @@
 #!/usr/bin/env python
 
 '''
-Parts of this code is reused from the samples at 
+Parts of this code is reused from the samples at
 http://www.tavendo.de/autobahn/tutorial/broadcast.html
 and is Copyright 2011 Tavendo GmbH
 '''
 
-import logging
 import sys
 import os
-import time
 
 from watchdog.observers import Observer
-from watchdog.events import LoggingEventHandler
 from twisted.internet import reactor
-from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol, listenWS, WebSocketProtocol, ConnectionRequest
+from autobahn.websocket import WebSocketServerFactory, WebSocketServerProtocol, listenWS, WebSocketProtocol
 
 from MessangerEventHandler import MessangerEventHandler
 
@@ -29,7 +26,7 @@ class FreshyServerProtocol(WebSocketServerProtocol):
         WebSocketServerProtocol.onOpen(self)
         self.factory.register(self)
         print 'Connection opened to', self.peerstr
-    
+
     def sendFSEvent(self, json):
         WebSocketProtocol.sendMessage(self, json)
         print 'to', self.peerstr
@@ -84,7 +81,7 @@ if __name__ == '__main__':
     ffactory = FreshyServerFactory("ws://localhost", 4444)
     ffactory.protocol = FreshyServerProtocol
     listenWS(ffactory)
-    
+
     for arg in sys.argv[1:]:
         dir_path = os.path.abspath(arg)
         if not os.path.exists(dir_path):
@@ -93,13 +90,13 @@ if __name__ == '__main__':
         if not os.path.isdir(dir_path):
             print dir_path, 'is not a directory.'
             sys.exit(1)
-    
+
         event_handler = MessangerEventHandler(ffactory, reactor, os.getcwd())
         observer = Observer()
         observer.schedule(event_handler, path=dir_path, recursive=True)
         observer.start()
         observers.append(observer)
-        
+
     try:
         reactor.run()
     except KeyboardInterrupt:
@@ -108,5 +105,3 @@ if __name__ == '__main__':
         reactor.stop()
         print '\nbye'
         sys.exit(1)
-    
-
