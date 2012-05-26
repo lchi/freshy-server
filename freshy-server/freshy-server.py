@@ -75,26 +75,28 @@ if __name__ == '__main__':
         print 'Usage: python freshy-server.py <dirs>'
         sys.exit(1)
 
-    observers = []
-
     log.startLogging(sys.stdout)
+
     ffactory = FreshyServerFactory("ws://localhost", 4444)
     ffactory.protocol = FreshyServerProtocol
     listenWS(ffactory)
 
+    observers = []
     for arg in sys.argv[1:]:
         dir_path = os.path.abspath(arg)
         if not os.path.exists(dir_path):
-            print dir_path, 'does not exist.'
+            print '%s does not exist.' % dir_path
             sys.exit(1)
         if not os.path.isdir(dir_path):
-            print dir_path, 'is not a directory.'
+            print '%s is not a directory.' % dir_path
             sys.exit(1)
 
         event_handler = MessangerEventHandler(ffactory, reactor, os.getcwd())
+
         observer = Observer()
         observer.schedule(event_handler, path=dir_path, recursive=True)
         observer.start()
+
         observers.append(observer)
 
     try:
