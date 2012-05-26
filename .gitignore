@@ -1,0 +1,9 @@
+*.swp
+tags
+TAGS
+*.swo
+*~
+*.pyc
+build/*
+dist/*
+freshy_server.egg-info/
